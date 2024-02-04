@@ -7,7 +7,7 @@
     import TimeGrid from '@event-calendar/time-grid';
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
-    
+
     let cal;
     let plugins = [TimeGrid, Interaction];
     let options = {
@@ -52,31 +52,11 @@
         ];
     }
 
-    function createEvent(info) {
-        curEvents = getEvents()
-        
-        plainOb = {start: info.start}
-        eventOb = addEvent( plainOb )
-        curEvents.append(eventOb)
-
-        options.events.append(plainOb);
-
-    }
-
     function _pad(num) {
         let norm = Math.floor(Math.abs(num));
         return (norm < 10 ? '0' : '') + norm;
     }
 
-    // Add new events to calendar
-    function updateOptions(info) {
-
-        options.events.append({start: info.start, end: info.end});
-    }
-
-    function removeOptions(duration) {
-        options.slotDuration = duration;
-    }
 </script>
 
 <Calendar bind:this={cal} {plugins} {options} />
