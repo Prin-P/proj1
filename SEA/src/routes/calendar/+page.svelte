@@ -7,12 +7,7 @@
     import TimeGrid from '@event-calendar/time-grid';
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
-    import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
-    import { storePopup } from '@skeletonlabs/skeleton';
-    storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
-    import { Modal, getModalStore,ListBox, ListBoxItem, } from '@skeletonlabs/skeleton';
-    //import type { ModalSettings, ModalComponent, ModalStore } from '@skeletonlabs/skeleton';
-
+    
     let cal;
     let plugins = [TimeGrid, Interaction];
     let options = {
