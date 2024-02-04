@@ -8,20 +8,24 @@
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
 
-
+    let cal;
     let plugins = [TimeGrid, Interaction];
     let options = {
         view: 'timeGridWeek',
-        events: createEvents(),
+        events: [],
         pointer: true,
         eventStartEditable: true,
+        editable: true,
+        selectable: true,
 
-        //select: function (info) {() => updateOptions(info)},
-        dateClick: function (info) {createEvent(info);},
-        eventDragStart: function (info) {console.log('dragStart');},
-        eventDragStop: function (info) {console.log('dragStop');},
-        eventDrop: function (info) {console.log('drop');},
+        //select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
+        //dateClick: function (info) {cal.addEvent(info);},
+       //eventDragStart: function (info) {console.log('dragStart');},
+        //eventDragStop: function (info) {console.log('dragStop');},
+        //eventDrop: function (info) {console.log('drop');},
     };
+
+    
 
     function createEvents() {
         let days = [];
@@ -75,4 +79,4 @@
     }
 </script>
 
-<Calendar {plugins} {options} />
+<Calendar bind:this={cal} {plugins} {options} />
