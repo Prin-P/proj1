@@ -1,3 +1,5 @@
+<Modal />
+
 <h1>Hello, please enter your name and either create or join a planning room!</h1>
 <script>
     //import Button from "../components/Button.svelte"

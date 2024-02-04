@@ -7,18 +7,23 @@
     import TimeGrid from '@event-calendar/time-grid';
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
+    import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+    import { storePopup } from '@skeletonlabs/skeleton';
+    storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
+    import { Modal, getModalStore,ListBox, ListBoxItem, } from '@skeletonlabs/skeleton';
+    //import type { ModalSettings, ModalComponent, ModalStore } from '@skeletonlabs/skeleton';
 
     let cal;
     let plugins = [TimeGrid, Interaction];
     let options = {
         view: 'timeGridWeek',
         events: [],
-        pointer: true,
+        //pointer: true,
         eventStartEditable: true,
         editable: true,
         selectable: true,
 
-        //select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
+        select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
         //dateClick: function (info) {cal.addEvent(info);},
        //eventDragStart: function (info) {console.log('dragStart');},
         //eventDragStop: function (info) {console.log('dragStop');},
