@@ -7,7 +7,9 @@
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
     import { goto } from '$app/navigation';
+    import logo from '$lib/key.png';
     export let cal;
+    
     let plugins = [TimeGrid, Interaction];
     let options = {
         view: 'timeGridWeek',
@@ -168,6 +170,9 @@
 
     <main class="row">
         <h1>Thank you for submitting. Here are the current availabilities:</h1>
+        <enhanced:img
+            src="../../../lib/key.png?w=280"
+        />
         <Calendar bind:this={cal} {plugins} {options} />
     </main>
     
