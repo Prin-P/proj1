@@ -14,12 +14,12 @@
         view: 'timeGridWeek',
         events: createEvents(),
         //pointer: true,
-        eventStartEditable: true,
-        editable: true,
-        selectable: true,
+        //eventStartEditable: true,
+        editable: false,
+        selectable: false,
 
-        select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
-        eventClick: function (info) { removeEvent(info)}
+        //select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
+        //eventClick: function (info) { removeEvent(info)}
 
     };
 
