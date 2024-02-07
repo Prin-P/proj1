@@ -41,7 +41,7 @@
             {start: days[1] + " 12:00", end: days[1] + " 14:00", resourceId: 2, },
             {start: days[2] + " 17:00", end: days[2] + " 24:00", resourceId: 1, },
             {start: days[0] + " 10:00", end: days[0] + " 14:00", resourceId: 1, },
-            {start: days[1] + " 16:00", end: days[2] + " 08:00", resourceId: 2, },
+            {start: days[1] + " 16:00", end: days[1] + " 18:00", resourceId: 2, },
             {start: days[2] + " 09:00", end: days[2] + " 13:00", resourceId: 2, },
             {start: days[3] + " 14:00", end: days[3] + " 20:00", resourceId: 1, },
             {start: days[5] + " 10:00", end: days[5] + " 16:00", resourceId: 2, },
@@ -167,10 +167,12 @@
       <header class="row">
         
             <button on:click={handleAuthClick}>
-                Sync Google Calendar
+                Sync Another Google Calendar
             </button>
     
-    
+            <button>
+                <a href="/calendar/submit">Submit</a>
+            </button>
         </header>
         <main class="row">
             <Calendar bind:this={cal} {plugins} {options} />
