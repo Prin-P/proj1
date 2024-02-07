@@ -2,9 +2,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.css">
 
-
-
-<script src="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.js">
+<script>
     import Calendar from '@event-calendar/core';
     import TimeGrid from '@event-calendar/time-grid';
     import Interaction from '@event-calendar/interaction';
@@ -23,24 +21,11 @@
 
         select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
         eventClick: function (info) { removeEvent(info)}
-        //dateClick: function (info) {cal.addEvent(info);},
-    //eventDragStart: function (info) {console.log('dragStart');},
-        //eventDragStop: function (info) {console.log('dragStop');},
-        //eventDrop: function (info) {console.log('drop');},
+
     };
 
     function removeEvent(){
         cal.removeEventById(info.event.id)
-    }
-    function test(){
-        //alert("hi")
-        //events = createEvents()
-        let day = new Date(2024, 2, 7, 10, 33, 30, 0);
-        let day2 = new Date(2024, 2, 7, 16, 33, 30, 0);
-        events = {start: day, end: day2, resourceId:1}
-        cal.addEvent(events)
-        //alert(events)
-        options.events = events
     }
 
     function createEvents() {
@@ -81,18 +66,27 @@
         return (norm < 10 ? '0' : '') + norm;
     }
     
+    /*const start = async () => {
+      // Initializes the client with the API key and the Translate API.
+      // @ts-ignore
+      gapi.client.init({
+        'apiKey': 'AIzaSyB_l63gYXH3mQw8G3PIDpy9AZbg7rJziWY',
+        'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+      }).then(function() {
+        // Executes an API request, and returns a Promise.
+        // The method name `language.translations.list` comes from the API discovery.
+        return gapi.client.language.translations.list({
+          q: 'hello world',
+          source: 'en',
+          target: 'de',
+        });
+      }).then(function(response) {
+        console.log(response.result.data.translations[0].translatedText);
+      }, function(reason) {
+        console.log('Error: ' + reason.result.error.message);
+      });
+    };*/
 
-</script>    
-{#if browser}
-<script >
-    
-
-    /* exported gapiLoaded */
-    /* exported gisLoaded */
-    /* exported handleAuthClick */
-    /* exported handleSignoutClick */
-        
-    // TODO(developer): Set to client ID and API key from the Developer Console
     const CLIENT_ID = '591983148481-03ba760usd8mv1534pr6b83l4l94hjup.apps.googleusercontent.com';
     const API_KEY = 'AIzaSyB_l63gYXH3mQw8G3PIDpy9AZbg7rJziWY';
 
@@ -106,9 +100,6 @@
     let tokenClient;
     let gapiInited = false;
     let gisInited = false;
-
-    document.getElementById('authorize_button').style.visibility = 'hidden';
-    document.getElementById('signout_button').style.visibility = 'hidden';
 
     /**
      * Callback after api.js is loaded.
@@ -155,25 +146,26 @@
     /**
      *  Sign in the user upon button click.
      */
- export function handleAuthClick() {
-    tokenClient.callback = async (resp) => {
-        if (resp.error !== undefined) {
-        throw (resp);
-        }
-        document.getElementById('signout_button').style.visibility = 'visible';
-        document.getElementById('authorize_button').innerText = 'Sync another calendar';
-        
-        //await listUpcomingEvents();
-    };
+    function handleAuthClick() {
+        tokenClient.callback = async (resp) => {
+            if (resp.error !== undefined) {
+            throw (resp);
+            }
+            //document.getElementById('signout_button').style.visibility = 'visible';
+            //document.getElementById('authorize_button').innerText = 'Sync another calendar';
+            
+            //await listUpcomingEvents();
+        };
 
-    if (gapi.client.getToken() === null) {
-        // Prompt the user to select a Google Account and ask for consent to share their data
-        // when establishing a new session.
-        tokenClient.requestAccessToken({prompt: 'consent'});
-    } else {
-        // Skip display of account chooser and consent dialog for an existing session.
-        tokenClient.requestAccessToken({prompt: ''});
-    }
+        if (gapi.client.getToken() === null) {
+            // Prompt the user to select a Google Account and ask for consent to share their data
+            // when establishing a new session.
+            tokenClient.requestAccessToken({prompt: 'consent'});
+        } else {
+            // Skip display of account chooser and consent dialog for an existing session.
+            tokenClient.requestAccessToken({prompt: ''});
+        }
+        goto('/calendar/synced')
     
 
 }
@@ -181,7 +173,7 @@
     /**
      *  Sign out the user upon button click.
      */
-function handleSignoutClick() {
+    function handleSignoutClick() {
     const token = gapi.client.getToken();
     if (token !== null) {
         google.accounts.oauth2.revoke(token.access_token);
@@ -191,59 +183,24 @@ function handleSignoutClick() {
         document.getElementById('signout_button').style.visibility = 'hidden';
     }
     }
-
-    /**
-     * Print the summary and start datetime/date of the next ten events in
-     * the authorized user's calendar. If no events are found an
-     * appropriate message is printed.
-     */
-    async function listUpcomingEvents() {
-        let response;
-        //createEvents()
-        try {
-            const request = {
-            'calendarId': 'primary',
-            'timeMin': (new Date()).toISOString(),
-            'showDeleted': false,
-            'singleEvents': true,
-            'maxResults': 10,
-            'orderBy': 'startTime',
-            };
-            
-            //response = await gapi.client.calendar.events.list(request);
-            
-        } catch (err) {
-            document.getElementById('content').innerText = err.message;
-            return;
-        }
-
-        const events = response.result.items;
-        if (!events || events.length == 0) {
-            document.getElementById('content').innerText = 'No events found.';
-            return;
-        }
-        // Flatten to string to display
-        const output = events.reduce(
-            (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
-            'Events:\n');
-        document.getElementById('content').innerText = output;
+  
+    const initializeGapi = async () => {
+      gapi.load('client', start);
     }
+  </script>
+  
+  <svelte:head>
+    <script src="https://apis.google.com/js/api.js" on:load={gapiLoaded}></script>
+    <script src="https://accounts.google.com/gsi/client" on:load={gisLoaded}></script>
+  </svelte:head>
 
-</script>
-{/if}
-
-{#if browser}
-    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
-{/if}
-{#if browser}
-    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
-{/if}
+  
 
   <header class="row">
-    <h4 class="col"><a href="https://github.com/vkurko/calendar">Event Calendar</a> Demo</h4>
-
-        <button id="authorize_button" onclick="handleAuthClick(); goto(`/calendar/synced`, true)">Sync Google Calendar</button>
-        <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
+    
+        <button on:click={handleAuthClick}>
+            Sync Google Calendar
+        </button>
 
 
     </header>
