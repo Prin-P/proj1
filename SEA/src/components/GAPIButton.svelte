@@ -1,84 +1,5 @@
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.css">
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.js">
-    import Calendar from '@event-calendar/core';
-    import TimeGrid from '@event-calendar/time-grid';
-    import Interaction from '@event-calendar/interaction';
-    import '@event-calendar/core/index.css';
-    import { browser } from '$app/environment';
-    export let cal;
-    let plugins = [TimeGrid, Interaction];
-    let options = {
-        view: 'timeGridWeek',
-        events: [],
-        //pointer: true,
-        eventStartEditable: true,
-        editable: true,
-        selectable: true,
-
-        select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
-        eventClick: function (info) { removeEvent(info)}
-        //dateClick: function (info) {cal.addEvent(info);},
-    //eventDragStart: function (info) {console.log('dragStart');},
-        //eventDragStop: function (info) {console.log('dragStop');},
-        //eventDrop: function (info) {console.log('drop');},
-    };
-
-    function removeEvent(){
-        cal.removeEventById(info.event.id)
-    }
-    function test(){
-        //alert("hi")
-        events = createEvents()
-        options.events = events
-    }
-
-    function createEvents() {
-        alert("test")
-        let days = [];
-        for (let i = 0; i < 7; ++i) {
-            let day = new Date();
-            let diff = i - day.getDay();
-            day.setDate(day.getDate() + diff);
-            year = day.getFullYear()
-            days[i] = day.getFullYear() + "-" + _pad(day.getMonth()+1) + "-" + _pad(day.getDate());
-        }
-        alert("hi")
-
-        return [
-            {start: days[0] + " 00:00", end: days[0] + " 09:00", resourceId: 1, display: "background"},
-            {start: days[1] + " 12:00", end: days[1] + " 14:00", resourceId: 2, display: "background"},
-            {start: days[2] + " 17:00", end: days[2] + " 24:00", resourceId: 1, display: "background"},
-            {start: days[0] + " 10:00", end: days[0] + " 14:00", resourceId: 1, title: "The calendar can display background and regular events", color: "#FE6B64"},
-            {start: days[1] + " 16:00", end: days[2] + " 08:00", resourceId: 2, title: "An event may span to another day", color: "#B29DD9"},
-            {start: days[2] + " 09:00", end: days[2] + " 13:00", resourceId: 2, title: "Events can be assigned to resources and the calendar has the resources view built-in", color: "#779ECB"},
-            {start: days[3] + " 14:00", end: days[3] + " 20:00", resourceId: 1, title: "", color: "#FE6B64"},
-            {start: days[3] + " 15:00", end: days[3] + " 18:00", resourceId: 1, title: "Overlapping events are positioned properly", color: "#779ECB"},
-            {start: days[5] + " 10:00", end: days[5] + " 16:00", resourceId: 2, title: "You have complete control over the <i><b>display</b></i> of events…", color: "#779ECB"},
-            {start: days[5] + " 14:00", end: days[5] + " 19:00", resourceId: 2, title: "…and you can drag and drop the events!", color: "#FE6B64"},
-            {start: days[5] + " 18:00", end: days[5] + " 21:00", resourceId: 2, title: "", color: "#B29DD9"},
-            {start: days[1], end: days[3], resourceId: 1, title: "All-day events can be displayed at the top", color: "#B29DD9", allDay: true}
-        ];
-
-        events.forEach(el => {
-            alert(el)
-            cal.addEvent(el)
-        })
-    }
-
-    function _pad(num) {
-        let norm = Math.floor(Math.abs(num));
-        return (norm < 10 ? '0' : '') + norm;
-    }
-    
-
-</script>    
-{#if browser}
 <script type="text/javascript">
+    import { browser } from '$app/environment';
     /* exported gapiLoaded */
     /* exported gisLoaded */
     /* exported handleAuthClick */
@@ -147,7 +68,7 @@
     /**
      *  Sign in the user upon button click.
      */
- function handleAuthClick() {
+export function handleAuthClick() {
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
         throw (resp);
@@ -173,7 +94,7 @@
     /**
      *  Sign out the user upon button click.
      */
-function handleSignoutClick() {
+export function handleSignoutClick() {
     const token = gapi.client.getToken();
     if (token !== null) {
         google.accounts.oauth2.revoke(token.access_token);
@@ -222,7 +143,6 @@ function handleSignoutClick() {
     }
 
 </script>
-{/if}
 
 {#if browser}
     <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
@@ -230,18 +150,3 @@ function handleSignoutClick() {
 {#if browser}
     <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 {/if}
-
-  <header class="row">
-    <h4 class="col"><a href="https://github.com/vkurko/calendar">Event Calendar</a> Demo</h4>
-
-        <button id="authorize_button" onclick="handleAuthClick();createEvents()">Authorize</button>
-        <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
-        <button on:click={test}>
-            Continue
-        </button>
-    </header>
-    <main class="row">
-        <Calendar bind:this={cal} {plugins} {options} />
-    </main>
-    
-
