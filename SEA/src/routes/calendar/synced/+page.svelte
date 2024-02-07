@@ -10,12 +10,11 @@
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
     import { browser } from '$app/environment';
-    import { goto } from '$app/navigation';
-    export let cal;
+    let cal;
     let plugins = [TimeGrid, Interaction];
     let options = {
         view: 'timeGridWeek',
-        events: [],
+        events: createEvents(),
         //pointer: true,
         eventStartEditable: true,
         editable: true,
@@ -23,30 +22,14 @@
 
         select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
         eventClick: function (info) { removeEvent(info)}
-        //dateClick: function (info) {cal.addEvent(info);},
-    //eventDragStart: function (info) {console.log('dragStart');},
-        //eventDragStop: function (info) {console.log('dragStop');},
-        //eventDrop: function (info) {console.log('drop');},
     };
 
     function removeEvent(){
         cal.removeEventById(info.event.id)
     }
-    function test(){
-        //alert("hi")
-        //events = createEvents()
-        let day = new Date(2024, 2, 7, 10, 33, 30, 0);
-        let day2 = new Date(2024, 2, 7, 16, 33, 30, 0);
-        events = {start: day, end: day2, resourceId:1}
-        cal.addEvent(events)
-        //alert(events)
-        options.events = events
-    }
 
     function createEvents() {
-        //alert("test")
-        //let day = new Date(2024, 2, 7, 10, 33, 30, 0);
-        //let day2 = new Date(2024, 2, 7, 16, 33, 30, 0);
+
         let days = [];
         for (let i = 0; i < 7; ++i) {
             let day = new Date();
@@ -70,10 +53,6 @@
             {start: days[1], end: days[3], resourceId: 1, title: "All-day events can be displayed at the top", color: "#B29DD9", allDay: true}
         ];
 
-        events.forEach(el => {
-            alert(el)
-            cal.addEvent(el)
-        })
     }
 
     function _pad(num) {
@@ -84,9 +63,7 @@
 
 </script>    
 {#if browser}
-<script >
-    
-
+<script type="text/javascript">
     /* exported gapiLoaded */
     /* exported gisLoaded */
     /* exported handleAuthClick */
@@ -155,7 +132,7 @@
     /**
      *  Sign in the user upon button click.
      */
- export function handleAuthClick() {
+ function handleAuthClick() {
     tokenClient.callback = async (resp) => {
         if (resp.error !== undefined) {
         throw (resp);
@@ -174,8 +151,8 @@
         // Skip display of account chooser and consent dialog for an existing session.
         tokenClient.requestAccessToken({prompt: ''});
     }
-    
 
+    //createEvents()
 }
 
     /**
@@ -199,7 +176,6 @@ function handleSignoutClick() {
      */
     async function listUpcomingEvents() {
         let response;
-        //createEvents()
         try {
             const request = {
             'calendarId': 'primary',
@@ -242,9 +218,8 @@ function handleSignoutClick() {
   <header class="row">
     <h4 class="col"><a href="https://github.com/vkurko/calendar">Event Calendar</a> Demo</h4>
 
-        <button id="authorize_button" onclick="handleAuthClick(); goto(`/calendar/synced`, true)">Sync Google Calendar</button>
+        <button id="authorize_button" onclick="handleAuthClick()">Sync another calendar</button>
         <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
-
 
     </header>
     <main class="row">
