@@ -1,5 +1,4 @@
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.css">
 
 <script>
     import Calendar from '@event-calendar/core';
@@ -7,7 +6,7 @@
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
     import { goto } from '$app/navigation';
-    import logo from '$lib/key.png';
+    import Button from '@smui/button';
     export let cal;
     
     let plugins = [TimeGrid, Interaction];
@@ -169,7 +168,7 @@
 
 
     <main class="row">
-        <h1>Thank you for submitting. Here are the current availabilities:</h1>
+        <h1>Thank you for submitting. 4 people have submitted their availabilities so far and here are the best times to meet:</h1>
         <enhanced:img
             src="../../../lib/key.png?w=280"
         />

@@ -1,5 +1,4 @@
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.css">
 
     <script>
         import Calendar from '@event-calendar/core';
@@ -7,6 +6,7 @@
         import Interaction from '@event-calendar/interaction';
         import '@event-calendar/core/index.css';
         import { goto } from '$app/navigation';
+        import Button from '@smui/button';
         export let cal;
         let plugins = [TimeGrid, Interaction];
         let options = {
@@ -165,14 +165,15 @@
       
     
       <header class="row">
-        
-            <button on:click={handleAuthClick}>
+            <h1>Your Google Calendar has been synced, and your free times (based on free spaces in you GCal) have been added as events in the calendar below. Feel free to edit, delete or add new events by dragging the slots.</h1>
+
+            <Button on:click={handleAuthClick}>
                 Sync Another Google Calendar
-            </button>
+            </Button>
     
-            <button>
+            <Button>
                 <a href="/calendar/submit">Submit</a>
-            </button>
+            </Button>
         </header>
         <main class="row">
             <Calendar bind:this={cal} {plugins} {options} />

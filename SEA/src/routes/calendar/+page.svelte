@@ -1,12 +1,12 @@
 
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.css">
 
 <script>
     import Calendar from '@event-calendar/core';
     import TimeGrid from '@event-calendar/time-grid';
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
+    import Button from '@smui/button';
     import { browser } from '$app/environment';
     import { goto } from '$app/navigation';
     export let cal;
@@ -198,9 +198,9 @@
 
   <header class="row">
     
-        <button on:click={handleAuthClick}>
+        <Button on:click={handleAuthClick}>
             Sync Google Calendar
-        </button>
+        </Button>
 
 
     </header>
