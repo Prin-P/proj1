@@ -89,10 +89,6 @@
             if (resp.error !== undefined) {
             throw (resp);
             }
-            //document.getElementById('signout_button').style.visibility = 'visible';
-            //document.getElementById('authorize_button').innerText = 'Sync another calendar';
-            
-            //await listUpcomingEvents();
         };
 
         if (gapi.client.getToken() === null) {

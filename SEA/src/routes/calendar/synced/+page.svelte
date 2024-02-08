@@ -12,7 +12,6 @@
         let options = {
             view: 'timeGridWeek',
             events: createEvents(),
-            //pointer: true,
             eventStartEditable: true,
             editable: true,
             selectable: true,
@@ -28,25 +27,25 @@
     
         function createEvents() {
 
-        let days = [];
-        for (let i = 0; i < 7; ++i) {
-            let day = new Date();
-            let diff = i - day.getDay();
-            day.setDate(day.getDate() + diff);
-            days[i] = day.getFullYear() + "-" + _pad(day.getMonth()+1) + "-" + _pad(day.getDate());
-        }
+            let days = [];
+            for (let i = 0; i < 7; ++i) {
+                let day = new Date();
+                let diff = i - day.getDay();
+                day.setDate(day.getDate() + diff);
+                days[i] = day.getFullYear() + "-" + _pad(day.getMonth()+1) + "-" + _pad(day.getDate());
+            }
 
-        return [
-            {start: days[0] + " 00:00", end: days[0] + " 09:00", resourceId: 1, },
-            {start: days[1] + " 12:00", end: days[1] + " 14:00", resourceId: 2, },
-            {start: days[2] + " 17:00", end: days[2] + " 24:00", resourceId: 1, },
-            {start: days[0] + " 10:00", end: days[0] + " 14:00", resourceId: 1, },
-            {start: days[1] + " 16:00", end: days[1] + " 18:00", resourceId: 2, },
-            {start: days[2] + " 09:00", end: days[2] + " 13:00", resourceId: 2, },
-            {start: days[3] + " 14:00", end: days[3] + " 20:00", resourceId: 1, },
-            {start: days[5] + " 10:00", end: days[5] + " 16:00", resourceId: 2, },
-            {start: days[5] + " 18:00", end: days[5] + " 21:00", resourceId: 2, },
-        ];
+            return [
+                {start: days[0] + " 00:00", end: days[0] + " 09:00", resourceId: 1, },
+                {start: days[1] + " 12:00", end: days[1] + " 14:00", resourceId: 2, },
+                {start: days[2] + " 17:00", end: days[2] + " 24:00", resourceId: 1, },
+                {start: days[0] + " 10:00", end: days[0] + " 14:00", resourceId: 1, },
+                {start: days[1] + " 16:00", end: days[1] + " 18:00", resourceId: 2, },
+                {start: days[2] + " 09:00", end: days[2] + " 13:00", resourceId: 2, },
+                {start: days[3] + " 14:00", end: days[3] + " 20:00", resourceId: 1, },
+                {start: days[5] + " 10:00", end: days[5] + " 16:00", resourceId: 2, },
+                {start: days[5] + " 18:00", end: days[5] + " 21:00", resourceId: 2, },
+            ];
 
         }
     
@@ -54,7 +53,9 @@
             let norm = Math.floor(Math.abs(num));
             return (norm < 10 ? '0' : '') + norm;
         }
-    
+        
+        // Adapted from https://developers.google.com/calendar/api/quickstart/js
+        // API info
         const CLIENT_ID = '591983148481-03ba760usd8mv1534pr6b83l4l94hjup.apps.googleusercontent.com';
         const API_KEY = 'AIzaSyB_l63gYXH3mQw8G3PIDpy9AZbg7rJziWY';
     
@@ -119,8 +120,8 @@
                 if (resp.error !== undefined) {
                 throw (resp);
                 }
-                //document.getElementById('signout_button').style.visibility = 'visible';
-                //document.getElementById('authorize_button').innerText = 'Sync another calendar';
+                document.getElementById('signout_button').style.visibility = 'visible';
+                document.getElementById('authorize_button').innerText = 'Sync another calendar';
                 
                 //await listUpcomingEvents();
             };
@@ -165,7 +166,7 @@
       
     
       <header class="row">
-            <h1>Your Google Calendar has been synced, and your free times (based on free spaces in you GCal) have been added as events in the calendar below. Feel free to edit, delete or add new events by dragging the slots.</h1>
+            <h1>Your Google Calendar has been synced, and your free times (based on free spaces in your Google Calendar) have been added as events in the calendar below. Feel free to edit, delete or add new events by dragging the slots.</h1>
 
             <Button on:click={handleAuthClick}>
                 Sync Another Google Calendar
