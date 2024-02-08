@@ -1,20 +1,15 @@
-
-
-
 <script>
     import Calendar from '@event-calendar/core';
     import TimeGrid from '@event-calendar/time-grid';
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
     import Button from '@smui/button';
-    import { browser } from '$app/environment';
     import { goto } from '$app/navigation';
     export let cal;
     let plugins = [TimeGrid, Interaction];
     let options = {
         view: 'timeGridWeek',
         events: [],
-        //pointer: true,
         eventStartEditable: true,
         editable: true,
         selectable: true,
@@ -28,11 +23,8 @@
         cal.removeEventById(info.event.id)
     }
 
-    function _pad(num) {
-        let norm = Math.floor(Math.abs(num));
-        return (norm < 10 ? '0' : '') + norm;
-    }
-
+    // Adapted from https://developers.google.com/calendar/api/quickstart/js
+    // API info
     const CLIENT_ID = '591983148481-03ba760usd8mv1534pr6b83l4l94hjup.apps.googleusercontent.com';
     const API_KEY = 'AIzaSyB_l63gYXH3mQw8G3PIDpy9AZbg7rJziWY';
 
@@ -114,25 +106,8 @@
         goto('/calendar/synced')
     
 
-}
-
-    /**
-     *  Sign out the user upon button click.
-     */
-    function handleSignoutClick() {
-    const token = gapi.client.getToken();
-    if (token !== null) {
-        google.accounts.oauth2.revoke(token.access_token);
-        gapi.client.setToken('');
-        document.getElementById('content').innerText = '';
-        document.getElementById('authorize_button').innerText = 'Authorize';
-        document.getElementById('signout_button').style.visibility = 'hidden';
-    }
     }
   
-    const initializeGapi = async () => {
-      gapi.load('client', start);
-    }
   </script>
   
   <svelte:head>
@@ -144,10 +119,9 @@
 
   <header class="row">
     
-        <Button on:click={handleAuthClick}>
+        <Button on:click={handleAuthClick}> 
             Sync Google Calendar
         </Button>
-
 
     </header>
     <main class="row">
