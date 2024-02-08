@@ -18,11 +18,10 @@
         selectable: true,
 
         select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
-        eventClick: function (info) { removeEvent(info)}
+        eventClick: function (info) { openModal(info)}
 
     };
     
-
     function openModal(info){
         showModal = true
     }
@@ -59,34 +58,34 @@
      * discovery doc to initialize the API.
      */
     async function initializeGapiClient() {
-    await gapi.client.init({
-        apiKey: API_KEY,
-        discoveryDocs: [DISCOVERY_DOC],
-    });
-    gapiInited = true;
-    maybeEnableButtons();
+        await gapi.client.init({
+            apiKey: API_KEY,
+            discoveryDocs: [DISCOVERY_DOC],
+        });
+        gapiInited = true;
+        maybeEnableButtons();
     }
 
     /**
      * Callback after Google Identity Services are loaded.
      */
     function gisLoaded() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: '', // defined later
-    });
-    gisInited = true;
-    maybeEnableButtons();
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: CLIENT_ID,
+            scope: SCOPES,
+            callback: '', // defined later
+        });
+        gisInited = true;
+        maybeEnableButtons();
     }
 
     /**
      * Enables user interaction after all libraries are loaded.
      */
     function maybeEnableButtons() {
-    if (gapiInited && gisInited) {
-        document.getElementById('authorize_button').style.visibility = 'visible';
-    }
+        if (gapiInited && gisInited) {
+            document.getElementById('authorize_button').style.visibility = 'visible';
+        }
     }
 
     /**
@@ -133,23 +132,13 @@
     </main>
     <Modal bind:showModal>
         <h2 slot="header">
-            modal
-            <small><em>adjective</em> mod·al \ˈmō-dəl\</small>
+            Customize your event!
         </h2>
     
         <ol class="definition-list">
-            <li>of or relating to modality in logic</li>
-            <li>
-                containing provisions as to the mode of procedure or the manner of taking effect —used of a
-                contract or legacy
-            </li>
-            <li>of or relating to a musical mode</li>
-            <li>of or relating to structure as opposed to substance</li>
-            <li>
-                of, relating to, or constituting a grammatical form or category characteristically indicating
-                predication
-            </li>
-            <li>of or relating to a statistical mode</li>
+            <Button on:click={handleAuthClick}>
+
+            </Button>
         </ol>
     
         <a href="https://www.merriam-webster.com/dictionary/modal">merriam-webster.com</a>
