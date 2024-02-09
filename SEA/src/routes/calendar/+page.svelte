@@ -1,98 +1,64 @@
-
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.css">
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/@event-calendar/build@2.6.1/event-calendar.min.js">
+<script>
     import Calendar from '@event-calendar/core';
     import TimeGrid from '@event-calendar/time-grid';
     import Interaction from '@event-calendar/interaction';
     import '@event-calendar/core/index.css';
-    import { browser } from '$app/environment';
+    import Button from '@smui/button';
     import { goto } from '$app/navigation';
+    import Modal from '../../components/Modal.svelte';
+
+    let modalProps = {showModal: false, info: null } // fields of modal
+    
     export let cal;
     let plugins = [TimeGrid, Interaction];
     let options = {
         view: 'timeGridWeek',
         events: [],
-        //pointer: true,
         eventStartEditable: true,
         editable: true,
         selectable: true,
+        slotMinTime: '08:00:00',
+        slotMaxTime: '20:00:00',
+        flexibleSlotTimeLimits:true,
 
-        select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
-        eventClick: function (info) { removeEvent(info)}
-        //dateClick: function (info) {cal.addEvent(info);},
-    //eventDragStart: function (info) {console.log('dragStart');},
-        //eventDragStop: function (info) {console.log('dragStop');},
-        //eventDrop: function (info) {console.log('drop');},
+        select: function (info) {createEvent(info)}, // creates event when date/time selection is made
+        eventClick: function (info) { openModal(info)} // triggered when an event is clicked
+
     };
+    
+    // Creates event with the correct color
+    function createEvent(info){
+        info.backgroundColor = '#0D98BA'
+        cal.addEvent(info)
+    }
 
-    function removeEvent(){
+    // Causes the modal to pop up
+    function openModal(info){
+        modalProps = {showModal: true, info: info}
+    }
+
+    // Deletes an event
+    function removeEvent(info){
         cal.removeEventById(info.event.id)
-    }
-    function test(){
-        //alert("hi")
-        //events = createEvents()
-        let day = new Date(2024, 2, 7, 10, 33, 30, 0);
-        let day2 = new Date(2024, 2, 7, 16, 33, 30, 0);
-        events = {start: day, end: day2, resourceId:1}
-        cal.addEvent(events)
-        //alert(events)
-        options.events = events
+        modalProps.showModal=false // closes the modal
     }
 
-    function createEvents() {
-        //alert("test")
-        //let day = new Date(2024, 2, 7, 10, 33, 30, 0);
-        //let day2 = new Date(2024, 2, 7, 16, 33, 30, 0);
-        let days = [];
-        for (let i = 0; i < 7; ++i) {
-            let day = new Date();
-            let diff = i - day.getDay();
-            day.setDate(day.getDate() + diff);
-            days[i] = day.getFullYear() + "-" + _pad(day.getMonth()+1) + "-" + _pad(day.getDate());
-        }
-
-        return [
-            {start: days[0] + " 00:00", end: days[0] + " 09:00", resourceId: 1, display: "background"},
-            {start: days[1] + " 12:00", end: days[1] + " 14:00", resourceId: 2, display: "background"},
-            {start: days[2] + " 17:00", end: days[2] + " 24:00", resourceId: 1, display: "background"},
-            {start: days[0] + " 10:00", end: days[0] + " 14:00", resourceId: 1, title: "The calendar can display background and regular events", color: "#FE6B64"},
-            {start: days[1] + " 16:00", end: days[2] + " 08:00", resourceId: 2, title: "An event may span to another day", color: "#B29DD9"},
-            {start: days[2] + " 09:00", end: days[2] + " 13:00", resourceId: 2, title: "Events can be assigned to resources and the calendar has the resources view built-in", color: "#779ECB"},
-            {start: days[3] + " 14:00", end: days[3] + " 20:00", resourceId: 1, title: "", color: "#FE6B64"},
-            {start: days[3] + " 15:00", end: days[3] + " 18:00", resourceId: 1, title: "Overlapping events are positioned properly", color: "#779ECB"},
-            {start: days[5] + " 10:00", end: days[5] + " 16:00", resourceId: 2, title: "You have complete control over the <i><b>display</b></i> of events…", color: "#779ECB"},
-            {start: days[5] + " 14:00", end: days[5] + " 19:00", resourceId: 2, title: "…and you can drag and drop the events!", color: "#FE6B64"},
-            {start: days[5] + " 18:00", end: days[5] + " 21:00", resourceId: 2, title: "", color: "#B29DD9"},
-            {start: days[1], end: days[3], resourceId: 1, title: "All-day events can be displayed at the top", color: "#B29DD9", allDay: true}
-        ];
-
-        events.forEach(el => {
-            alert(el)
-            cal.addEvent(el)
-        })
+    // Allows user to change color of the event depending on how preferable the time is
+    function changeToPreferableEvent(info){
+        info.event.backgroundColor = '#0D98BA'
+        cal.updateEvent(info.event)
+        modalProps.showModal=false // closes the modal
     }
 
-    function _pad(num) {
-        let norm = Math.floor(Math.abs(num));
-        return (norm < 10 ? '0' : '') + norm;
+    // Allows user to change color of the event depending on how preferable the time is
+    function changeToUnpreferableEvent(info){
+        info.event.backgroundColor = '#E1C340'
+        cal.updateEvent(info.event)
+        modalProps.showModal=false // closes the modal
     }
-    
 
-</script>    
-{#if browser}
-<script >
-    
-
-    /* exported gapiLoaded */
-    /* exported gisLoaded */
-    /* exported handleAuthClick */
-    /* exported handleSignoutClick */
-        
-    // TODO(developer): Set to client ID and API key from the Developer Console
+    // Adapted from https://developers.google.com/calendar/api/quickstart/js
+    // API info
     const CLIENT_ID = '591983148481-03ba760usd8mv1534pr6b83l4l94hjup.apps.googleusercontent.com';
     const API_KEY = 'AIzaSyB_l63gYXH3mQw8G3PIDpy9AZbg7rJziWY';
 
@@ -107,9 +73,6 @@
     let gapiInited = false;
     let gisInited = false;
 
-    document.getElementById('authorize_button').style.visibility = 'hidden';
-    document.getElementById('signout_button').style.visibility = 'hidden';
-
     /**
      * Callback after api.js is loaded.
      */
@@ -122,133 +85,101 @@
      * discovery doc to initialize the API.
      */
     async function initializeGapiClient() {
-    await gapi.client.init({
-        apiKey: API_KEY,
-        discoveryDocs: [DISCOVERY_DOC],
-    });
-    gapiInited = true;
-    maybeEnableButtons();
+        await gapi.client.init({
+            apiKey: API_KEY,
+            discoveryDocs: [DISCOVERY_DOC],
+        });
+        gapiInited = true;
+        maybeEnableButtons();
     }
 
     /**
      * Callback after Google Identity Services are loaded.
      */
     function gisLoaded() {
-    tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: '', // defined later
-    });
-    gisInited = true;
-    maybeEnableButtons();
+        tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: CLIENT_ID,
+            scope: SCOPES,
+            callback: '', // defined later
+        });
+        gisInited = true;
+        maybeEnableButtons();
     }
 
     /**
      * Enables user interaction after all libraries are loaded.
      */
     function maybeEnableButtons() {
-    if (gapiInited && gisInited) {
-        document.getElementById('authorize_button').style.visibility = 'visible';
-    }
+        if (gapiInited && gisInited) {
+            document.getElementById('authorize_button').style.visibility = 'visible';
+        }
     }
 
     /**
      *  Sign in the user upon button click.
      */
- export function handleAuthClick() {
-    tokenClient.callback = async (resp) => {
-        if (resp.error !== undefined) {
-        throw (resp);
-        }
-        document.getElementById('signout_button').style.visibility = 'visible';
-        document.getElementById('authorize_button').innerText = 'Sync another calendar';
-        
-        //await listUpcomingEvents();
-    };
+    function handleAuthClick() {
+        tokenClient.callback = async (resp) => {
+            if (resp.error !== undefined) {
+            throw (resp);
+            }
+        };
 
-    if (gapi.client.getToken() === null) {
-        // Prompt the user to select a Google Account and ask for consent to share their data
-        // when establishing a new session.
-        tokenClient.requestAccessToken({prompt: 'consent'});
-    } else {
-        // Skip display of account chooser and consent dialog for an existing session.
-        tokenClient.requestAccessToken({prompt: ''});
-    }
+        if (gapi.client.getToken() === null) {
+            // Prompt the user to select a Google Account and ask for consent to share their data
+            // when establishing a new session.
+            tokenClient.requestAccessToken({prompt: 'consent'});
+        } else {
+            // Skip display of account chooser and consent dialog for an existing session.
+            tokenClient.requestAccessToken({prompt: ''});
+        }
+        goto('/calendar/synced')
     
 
-}
-
-    /**
-     *  Sign out the user upon button click.
-     */
-function handleSignoutClick() {
-    const token = gapi.client.getToken();
-    if (token !== null) {
-        google.accounts.oauth2.revoke(token.access_token);
-        gapi.client.setToken('');
-        document.getElementById('content').innerText = '';
-        document.getElementById('authorize_button').innerText = 'Authorize';
-        document.getElementById('signout_button').style.visibility = 'hidden';
     }
-    }
+  
+  </script>
+  
+<svelte:head>
+    <script src="https://apis.google.com/js/api.js" on:load={gapiLoaded}></script>
+    <script src="https://accounts.google.com/gsi/client" on:load={gisLoaded}></script>
+</svelte:head>
 
-    /**
-     * Print the summary and start datetime/date of the next ten events in
-     * the authorized user's calendar. If no events are found an
-     * appropriate message is printed.
-     */
-    async function listUpcomingEvents() {
-        let response;
-        //createEvents()
-        try {
-            const request = {
-            'calendarId': 'primary',
-            'timeMin': (new Date()).toISOString(),
-            'showDeleted': false,
-            'singleEvents': true,
-            'maxResults': 10,
-            'orderBy': 'startTime',
-            };
-            
-            //response = await gapi.client.calendar.events.list(request);
-            
-        } catch (err) {
-            document.getElementById('content').innerText = err.message;
-            return;
-        }
+  
 
-        const events = response.result.items;
-        if (!events || events.length == 0) {
-            document.getElementById('content').innerText = 'No events found.';
-            return;
-        }
-        // Flatten to string to display
-        const output = events.reduce(
-            (str, event) => `${str}${event.summary} (${event.start.dateTime || event.start.date})\n`,
-            'Events:\n');
-        document.getElementById('content').innerText = output;
-    }
+<header class="row">
+    <Button on:click={handleAuthClick}> 
+        Sync Google Calendar
+    </Button>
+</header>
+<main class="row">
+    <Calendar bind:this={cal} {plugins} {options} />
+</main>
+<Modal bind:modalProps>
+    <h2 slot="header">
+        Customize your event!
+    </h2>
 
-</script>
-{/if}
+    <main slot = "customize"> <!--slot is used to indicate where in the modal component this shows up-->
+        <p>
+            Change your preference for this event:
+        </p>
 
-{#if browser}
-    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
-{/if}
-{#if browser}
-    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
-{/if}
+        <Button on:click={changeToPreferableEvent(modalProps.info)}>
+            Preferable
+        </Button>
 
-  <header class="row">
-    <h4 class="col"><a href="https://github.com/vkurko/calendar">Event Calendar</a> Demo</h4>
-
-        <button id="authorize_button" onclick="handleAuthClick(); goto(`/calendar/synced`, true)">Sync Google Calendar</button>
-        <button id="signout_button" onclick="handleSignoutClick()">Sign Out</button>
-
-
-    </header>
-    <main class="row">
-        <Calendar bind:this={cal} {plugins} {options} />
+        <Button on:click={changeToUnpreferableEvent(modalProps.info)}>
+            Unpreferable but possible
+        </Button>
     </main>
-    
+
+    <main slot = "delete">
+        <Button on:click={removeEvent(modalProps.info)}>
+            Delete Event
+        </Button>
+    </main>
+
+</Modal>
+
 
