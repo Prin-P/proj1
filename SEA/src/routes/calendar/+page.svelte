@@ -26,13 +26,21 @@
     };
     
     function openModal(info){
-        //showModal = true
-        //info = info
         modalProps = {showModal: true, info: info}
     }
 
     function removeEvent(info){
         cal.removeEventById(info.event.id)
+    }
+
+    function changeToPreferableEvent(info){
+        info.event.backgroundColor = '#0D98BA'
+        cal.updateEvent(info.event)
+    }
+
+    function changeToUnpreferableEvent(info){
+        info.event.backgroundColor = '#E1C340'
+        cal.updateEvent(info.event)
     }
 
     // Adapted from https://developers.google.com/calendar/api/quickstart/js
@@ -141,12 +149,25 @@
         </h2>
     
         <ol class="definition-list">
-            <Button on:click={handleAuthClick}>
+            <h3>
+                Change your preference for this event:
+            </h3>
 
+            <Button on:click={changeToPreferableEvent(modalProps.info)}>
+                Preferable
+            </Button>
+
+            <Button on:click={changeToUnpreferableEvent(modalProps.info)}>
+                Unpreferable but possible
+            </Button>
+        </ol>
+
+        <ol class="definition-list">
+            <Button on:click={removeEvent(modalProps.info)}>
+                Delete Event
             </Button>
         </ol>
     
-        <a href="https://www.merriam-webster.com/dictionary/modal">merriam-webster.com</a>
     </Modal>
     
 
