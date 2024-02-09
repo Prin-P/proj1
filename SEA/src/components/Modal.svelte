@@ -1,10 +1,13 @@
 <!-- Adapted from https://svelte.dev/examples/modal -->
 <script>
-	export let showModal; // boolean
+	export let modalProps;
+	let {showModal, info} = modalProps
+	//export let showModal; // boolean
+	//export let info;
 
 	let dialog; // HTMLDialogElement
 
-	$: if (dialog && showModal) dialog.showModal();
+	$: if (dialog && modalProps.showModal) dialog.showModal();
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->

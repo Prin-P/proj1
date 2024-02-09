@@ -7,7 +7,10 @@
     import { goto } from '$app/navigation';
     import Modal from '../../components/Modal.svelte';
 
-    let showModal = false;
+    //let showModal = false;
+    //let info;
+    let modalProps = {showModal: false, info: null }
+    
     export let cal;
     let plugins = [TimeGrid, Interaction];
     let options = {
@@ -23,7 +26,9 @@
     };
     
     function openModal(info){
-        showModal = true
+        //showModal = true
+        //info = info
+        modalProps = {showModal: true, info: info}
     }
 
     function removeEvent(info){
@@ -130,7 +135,7 @@
     <main class="row">
         <Calendar bind:this={cal} {plugins} {options} />
     </main>
-    <Modal bind:showModal>
+    <Modal bind:modalProps>
         <h2 slot="header">
             Customize your event!
         </h2>
