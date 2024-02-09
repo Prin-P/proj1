@@ -31,16 +31,19 @@
 
     function removeEvent(info){
         cal.removeEventById(info.event.id)
+        modalProps.showModal=false
     }
 
     function changeToPreferableEvent(info){
         info.event.backgroundColor = '#0D98BA'
         cal.updateEvent(info.event)
+        modalProps.showModal=false
     }
 
     function changeToUnpreferableEvent(info){
         info.event.backgroundColor = '#E1C340'
         cal.updateEvent(info.event)
+        modalProps.showModal=false
     }
 
     // Adapted from https://developers.google.com/calendar/api/quickstart/js
@@ -148,10 +151,10 @@
             Customize your event!
         </h2>
     
-        <ol class="definition-list">
-            <h3>
+        <main slot = "customize">
+            <p>
                 Change your preference for this event:
-            </h3>
+            </p>
 
             <Button on:click={changeToPreferableEvent(modalProps.info)}>
                 Preferable
@@ -160,13 +163,13 @@
             <Button on:click={changeToUnpreferableEvent(modalProps.info)}>
                 Unpreferable but possible
             </Button>
-        </ol>
+        </main>
 
-        <ol class="definition-list">
+        <main slot = "delete">
             <Button on:click={removeEvent(modalProps.info)}>
                 Delete Event
             </Button>
-        </ol>
+        </main>
     
     </Modal>
     

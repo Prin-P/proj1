@@ -2,12 +2,11 @@
 <script>
 	export let modalProps;
 	let {showModal, info} = modalProps
-	//export let showModal; // boolean
-	//export let info;
 
 	let dialog; // HTMLDialogElement
 
 	$: if (dialog && modalProps.showModal) dialog.showModal();
+	$: if (dialog && !modalProps.showModal) dialog.close()
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
@@ -20,10 +19,10 @@
 	<div on:click|stopPropagation>
 		<slot name="header" />
 		<hr />
-		<slot />
+		<slot name = "customize"/>
 		<hr />
-		<!-- svelte-ignore a11y-autofocus -->
-		<button autofocus on:click={() => dialog.close()}>Close</button>
+		<slot name = "delete"/>
+		<hr />
 	</div>
 </dialog>
 
@@ -61,8 +60,5 @@
 		to {
 			opacity: 1;
 		}
-	}
-	button {
-		display: block;
 	}
 </style>
