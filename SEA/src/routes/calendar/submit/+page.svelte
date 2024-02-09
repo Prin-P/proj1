@@ -51,7 +51,10 @@
 </script>
 
 <main class="row">
-    <h1>Thank you for submitting. 4 people have submitted their availabilities so far and here are the best times to meet:</h1>
+    <h2>
+        Thank you for submitting. 4 people have submitted their availabilities 
+        so far and here are the best times to meet:
+    </h2>
     <enhanced:img
         src="../../../lib/key.png?w=280"
     />
