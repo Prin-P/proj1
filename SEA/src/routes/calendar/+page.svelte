@@ -17,6 +17,9 @@
         eventStartEditable: true,
         editable: true,
         selectable: true,
+        slotMinTime: '08:00:00',
+        slotMaxTime: '20:00:00',
+        flexibleSlotTimeLimits:true,
 
         select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
         eventClick: function (info) { openModal(info)} // triggered when an event is clicked

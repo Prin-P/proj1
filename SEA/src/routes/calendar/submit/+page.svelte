@@ -13,6 +13,9 @@
         events: createEvents(),
         editable: false,
         selectable: false,
+        slotMinTime: '08:00:00',
+        slotMaxTime: '20:00:00',
+        flexibleSlotTimeLimits:true,
 
     };
 
@@ -27,8 +30,6 @@
         }
 
         return [
-            {start: days[0] + " 00:00", end: days[0] + " 02:00", resourceId: 1, backgroundColor: '#3A5A40'},
-            {start: days[0] + " 02:00", end: days[0] + " 09:00", resourceId: 1, backgroundColor: '#BBD58E'},
             {start: days[1] + " 12:00", end: days[1] + " 14:00", resourceId: 2, backgroundColor: '#588157'},
             {start: days[2] + " 17:00", end: days[2] + " 24:00", resourceId: 1, backgroundColor: '#5A9F68'},
             {start: days[0] + " 10:00", end: days[0] + " 14:00", resourceId: 1, backgroundColor: '#BBD58E'},

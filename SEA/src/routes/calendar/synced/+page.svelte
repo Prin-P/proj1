@@ -19,6 +19,9 @@
         eventStartEditable: true,
         editable: true,
         selectable: true,
+        slotMinTime: '08:00:00',
+        slotMaxTime: '20:00:00',
+        flexibleSlotTimeLimits:true,
 
         select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
         eventClick: function (info) { openModal(info)} // triggered when an event is clicked
@@ -61,7 +64,7 @@
         }
 
         return [
-            {start: days[0] + " 00:00", end: days[0] + " 09:00", resourceId: 1, backgroundColor: '#0D98BA'},
+            {start: days[0] + " 08:00", end: days[0] + " 09:00", resourceId: 1, backgroundColor: '#0D98BA'},
             {start: days[1] + " 12:00", end: days[1] + " 14:00", resourceId: 2, backgroundColor: '#0D98BA' },
             {start: days[2] + " 17:00", end: days[2] + " 24:00", resourceId: 1, backgroundColor: '#0D98BA' },
             {start: days[0] + " 10:00", end: days[0] + " 14:00", resourceId: 1, backgroundColor: '#0D98BA' },
@@ -172,7 +175,13 @@
     
 
 <header class="row">
-    <h1>Your Google Calendar has been synced, and your free times (based on free spaces in your Google Calendar) have been added as events in the calendar below. Feel free to edit, delete or add new events by dragging the slots.</h1>
+    <h2>Your Google Calendar has been synced, and your free times 
+        (based on free spaces in your Google Calendar) have been added 
+        as events in the calendar below. Feel free to edit
+        add new events by dragging the slots. You may also delete
+        and change the preferability of the event by clicking on
+        the event.
+    </h2>
 
     <Button on:click={handleAuthClick}>
         Sync Another Google Calendar
