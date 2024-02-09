@@ -177,7 +177,7 @@
 <header class="row">
     <h2>Your Google Calendar has been synced, and your free times 
         (based on free spaces in your Google Calendar) have been added 
-        as events in the calendar below. Feel free to edit
+        as events in the calendar below. Feel free to edit and
         add new events by dragging the slots. You may also delete
         and change the preferability of the event by clicking on
         the event.
