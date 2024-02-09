@@ -19,6 +19,7 @@
 
     };
 
+    //Events populated in calendar
     function createEvents() {
 
         let days = [];

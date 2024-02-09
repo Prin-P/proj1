@@ -21,11 +21,17 @@
         slotMaxTime: '20:00:00',
         flexibleSlotTimeLimits:true,
 
-        select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
+        select: function (info) {createEvent(info)}, // creates event when date/time selection is made
         eventClick: function (info) { openModal(info)} // triggered when an event is clicked
 
     };
     
+    // Creates event with the correct color
+    function createEvent(info){
+        info.backgroundColor = '#0D98BA'
+        cal.addEvent(info)
+    }
+
     // Causes the modal to pop up
     function openModal(info){
         modalProps = {showModal: true, info: info}
