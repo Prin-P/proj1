@@ -7,7 +7,11 @@
     import '@event-calendar/core/index.css';
     import { goto } from '$app/navigation';
     import Button from '@smui/button';
+    import Modal from '../../../components/Modal.svelte';
+
     export let cal;
+    let modalProps = {showModal: false, info: null } // fields of modal
+
     let plugins = [TimeGrid, Interaction];
     let options = {
         view: 'timeGridWeek',
@@ -17,12 +21,33 @@
         selectable: true,
 
         select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
-        eventClick: function (info) { removeEvent(info)}
+        eventClick: function (info) { openModal(info)} // triggered when an event is clicked
 
     };
 
-    function removeEvent(){
+    // Causes the modal to pop up
+    function openModal(info){
+        modalProps = {showModal: true, info: info}
+    }
+
+    // Deletes an event
+    function removeEvent(info){
         cal.removeEventById(info.event.id)
+        modalProps.showModal=false // closes the modal
+    }
+
+    // Allows user to change color of the event depending on how preferable the time is
+    function changeToPreferableEvent(info){
+        info.event.backgroundColor = '#0D98BA'
+        cal.updateEvent(info.event)
+        modalProps.showModal=false // closes the modal
+    }
+
+    // Allows user to change color of the event depending on how preferable the time is
+    function changeToUnpreferableEvent(info){
+        info.event.backgroundColor = '#E1C340'
+        cal.updateEvent(info.event)
+        modalProps.showModal=false // closes the modal
     }
 
     function createEvents() {
@@ -160,6 +185,33 @@
 <main class="row">
     <Calendar bind:this={cal} {plugins} {options} />
 </main>
+
+<Modal bind:modalProps>
+    <h2 slot="header">
+        Customize your event!
+    </h2>
+
+    <main slot = "customize"> <!--slot is used to indicate where in the modal component this shows up-->
+        <p>
+            Change your preference for this event:
+        </p>
+
+        <Button on:click={changeToPreferableEvent(modalProps.info)}>
+            Preferable
+        </Button>
+
+        <Button on:click={changeToUnpreferableEvent(modalProps.info)}>
+            Unpreferable but possible
+        </Button>
+    </main>
+
+    <main slot = "delete">
+        <Button on:click={removeEvent(modalProps.info)}>
+            Delete Event
+        </Button>
+    </main>
+
+</Modal>
 
 
 

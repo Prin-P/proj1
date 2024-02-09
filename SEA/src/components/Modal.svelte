@@ -1,11 +1,12 @@
 <!-- Adapted from https://svelte.dev/examples/modal -->
 <script>
-	export let modalProps;
+	export let modalProps; //exports this variable so modalProps can be changed and accessed in page.svelte 
 	let {showModal, info} = modalProps
 
 	let dialog; // HTMLDialogElement
 
-	$: if (dialog && modalProps.showModal) dialog.showModal();
+	//uses reactivity to open and close modal as 'modalProps.showModal' is changed in the main screen
+	$: if (dialog && modalProps.showModal) dialog.showModal(); 
 	$: if (dialog && !modalProps.showModal) dialog.close()
 </script>
 

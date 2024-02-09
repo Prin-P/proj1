@@ -7,9 +7,7 @@
     import { goto } from '$app/navigation';
     import Modal from '../../components/Modal.svelte';
 
-    //let showModal = false;
-    //let info;
-    let modalProps = {showModal: false, info: null }
+    let modalProps = {showModal: false, info: null } // fields of modal
     
     export let cal;
     let plugins = [TimeGrid, Interaction];
@@ -21,29 +19,33 @@
         selectable: true,
 
         select: function (info) {cal.addEvent(info)}, // cal.add event to confirm an event to add
-        eventClick: function (info) { openModal(info)}
+        eventClick: function (info) { openModal(info)} // triggered when an event is clicked
 
     };
     
+    // Causes the modal to pop up
     function openModal(info){
         modalProps = {showModal: true, info: info}
     }
 
+    // Deletes an event
     function removeEvent(info){
         cal.removeEventById(info.event.id)
-        modalProps.showModal=false
+        modalProps.showModal=false // closes the modal
     }
 
+    // Allows user to change color of the event depending on how preferable the time is
     function changeToPreferableEvent(info){
         info.event.backgroundColor = '#0D98BA'
         cal.updateEvent(info.event)
-        modalProps.showModal=false
+        modalProps.showModal=false // closes the modal
     }
 
+    // Allows user to change color of the event depending on how preferable the time is
     function changeToUnpreferableEvent(info){
         info.event.backgroundColor = '#E1C340'
         cal.updateEvent(info.event)
-        modalProps.showModal=false
+        modalProps.showModal=false // closes the modal
     }
 
     // Adapted from https://developers.google.com/calendar/api/quickstart/js
@@ -129,48 +131,46 @@
   
   </script>
   
-  <svelte:head>
+<svelte:head>
     <script src="https://apis.google.com/js/api.js" on:load={gapiLoaded}></script>
     <script src="https://accounts.google.com/gsi/client" on:load={gisLoaded}></script>
-  </svelte:head>
+</svelte:head>
 
   
 
-  <header class="row">
-    
-        <Button on:click={handleAuthClick}> 
-            Sync Google Calendar
+<header class="row">
+    <Button on:click={handleAuthClick}> 
+        Sync Google Calendar
+    </Button>
+</header>
+<main class="row">
+    <Calendar bind:this={cal} {plugins} {options} />
+</main>
+<Modal bind:modalProps>
+    <h2 slot="header">
+        Customize your event!
+    </h2>
+
+    <main slot = "customize"> <!--slot is used to indicate where in the modal component this shows up-->
+        <p>
+            Change your preference for this event:
+        </p>
+
+        <Button on:click={changeToPreferableEvent(modalProps.info)}>
+            Preferable
         </Button>
 
-    </header>
-    <main class="row">
-        <Calendar bind:this={cal} {plugins} {options} />
+        <Button on:click={changeToUnpreferableEvent(modalProps.info)}>
+            Unpreferable but possible
+        </Button>
     </main>
-    <Modal bind:modalProps>
-        <h2 slot="header">
-            Customize your event!
-        </h2>
-    
-        <main slot = "customize">
-            <p>
-                Change your preference for this event:
-            </p>
 
-            <Button on:click={changeToPreferableEvent(modalProps.info)}>
-                Preferable
-            </Button>
+    <main slot = "delete">
+        <Button on:click={removeEvent(modalProps.info)}>
+            Delete Event
+        </Button>
+    </main>
 
-            <Button on:click={changeToUnpreferableEvent(modalProps.info)}>
-                Unpreferable but possible
-            </Button>
-        </main>
+</Modal>
 
-        <main slot = "delete">
-            <Button on:click={removeEvent(modalProps.info)}>
-                Delete Event
-            </Button>
-        </main>
-    
-    </Modal>
-    
 
